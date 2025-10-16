@@ -20,7 +20,7 @@ node {
     // ---------- PIPELINE STAGES ----------
     stage('Checkout Source') {
         echo "📥 Cloning project from GitHub..."
-        git branch: GIT_BRANCH, url: GIT_URL, credentialsId: 'git-creds'
+        git branch: GIT_BRANCH, url: GIT_URL, credentialsId: 'githubcreds'
     }
 
     stage('Build WAR using Maven') {
