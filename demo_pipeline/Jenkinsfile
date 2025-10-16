@@ -1,5 +1,5 @@
 node {
-    def GIT_URL               = 'https://github.com/your-org/demo-pipeline.git'
+    def GIT_URL               = 'https://github.com/bharathbala96/bharathgit.git'
     def GIT_BRANCH            = 'main'
     def MAVEN_TOOL_NAME       = 'Maven-3.9'
     def ARTIFACTORY_SERVER_ID = 'ai2cloud-artifactory'
