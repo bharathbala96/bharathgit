@@ -1,33 +1,27 @@
-// ================================================
-// Jenkins Scripted Pipeline - AI2Cloud CI/CD
-// ================================================
 node {
-    // ---------- CONFIGURATIONS ----------
     def GIT_URL               = 'https://github.com/your-org/demo-pipeline.git'
     def GIT_BRANCH            = 'main'
-    def MAVEN_TOOL_NAME       = 'Maven-3.9'                 // Change to your Jenkins Maven tool name
-    def ARTIFACTORY_SERVER_ID = 'ai2cloud-artifactory'      // Same as configured in Jenkins
-    def ARTIFACTORY_REPO      = 'ai2cloud-libs-release'     // Your JFrog repo
-    def GROUP_PATH            = 'com/ai2cloud/sampleweb'    // Artifact group ID path
+    def MAVEN_TOOL_NAME       = 'Maven-3.9'
+    def ARTIFACTORY_SERVER_ID = 'ai2cloud-artifactory'
+    def ARTIFACTORY_REPO      = 'ai2cloud-libs-release'
+    def GROUP_PATH            = 'com/ai2cloud/sampleweb'
     def APP_VERSION           = '1.0.0'
     def WAR_NAME              = "sampleweb-${APP_VERSION}.war"
 
-    def DEPLOY_HOST           = '3.108.61.208'              // Remote Tomcat server IP
+    def DEPLOY_HOST           = '3.108.61.208'
     def DEPLOY_USER           = 'ec2-user'
     def DEPLOY_WEBAPPS_PATH   = '/usr/share/tomcat/webapps'
     def PRIVATE_KEY_PATH      = '/var/lib/jenkins/.ssh/id_rsa'
 
-    // ---------- PIPELINE STAGES ----------
     stage('Checkout Source') {
-        echo "📥 Cloning project from GitHub..."
+        echo "🔍 Cloning project from GitHub..."
         git branch: GIT_BRANCH, url: GIT_URL, credentialsId: 'githubcreds'
     }
 
     stage('Build WAR using Maven') {
-        echo "⚙ Building application with Maven..."
+        echo "⚙️ Building application with Maven..."
         def mvnHome = tool name: MAVEN_TOOL_NAME, type: 'maven'
         withEnv(["PATH=${mvnHome}/bin:${env.PATH}"]) {
-            sh 'mvn -version'
             sh 'mvn clean package -DskipTests'
         }
         echo "✅ WAR file built successfully."
@@ -37,7 +31,6 @@ node {
         echo "📦 Uploading WAR to JFrog Artifactory..."
         def server = Artifactory.server(ARTIFACTORY_SERVER_ID)
         def buildInfo = Artifactory.newBuildInfo()
-
         def uploadSpec = """{
           "files": [
             {
@@ -49,13 +42,11 @@ node {
         }"""
         server.upload spec: uploadSpec, buildInfo: buildInfo
         server.publishBuildInfo buildInfo
-
         echo "✅ Uploaded to: https://trialytgm01.jfrog.io/artifactory/${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/${WAR_NAME}"
     }
 
     stage('Deploy to Remote Tomcat Server') {
         echo "🚀 Deploying WAR to remote Tomcat at ${DEPLOY_HOST}..."
-
         def remote = [:]
         remote.name = "targetServer"
         remote.host = DEPLOY_HOST
@@ -63,10 +54,10 @@ node {
         remote.allowAnyHosts = true
         remote.identityFile = PRIVATE_KEY_PATH
 
-        // Transfer WAR file to remote server
+        // Transfer WAR file
         sshPut remote: remote, from: "target/${WAR_NAME}", into: "/tmp/"
 
-        // Restart Tomcat with new deployment
+        // Restart Tomcat with new WAR
         sshCommand remote: remote, command: """
             sudo systemctl stop tomcat || true
             sudo rm -rf ${DEPLOY_WEBAPPS_PATH}/sampleweb*
@@ -74,11 +65,11 @@ node {
             sudo systemctl start tomcat
         """
         echo "✅ Deployment completed."
-        echo "🌐 Application URL: http://${DEPLOY_HOST}:8080/sampleweb/"
+        echo "🌐 App URL: http://${DEPLOY_HOST}:8080/sampleweb/"
     }
 
     stage('Cleanup') {
         echo "🧹 Cleaning workspace..."
         cleanWs()
-    }
+    }
 }
