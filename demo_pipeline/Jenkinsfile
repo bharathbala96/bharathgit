@@ -3,8 +3,8 @@
 // ================================================
 node {
     // ---------- CONFIGURATIONS ----------
-    def GIT_URL               = 'https://github.com/bharathbala96/bharathgit.git'
-    def GIT_BRANCH            = 'master'
+    def GIT_URL               = 'https://github.com/your-org/demo-pipeline.git'
+    def GIT_BRANCH            = 'main'
     def MAVEN_TOOL_NAME       = 'Maven-3.9'                 // Change to your Jenkins Maven tool name
     def ARTIFACTORY_SERVER_ID = 'ai2cloud-artifactory'      // Same as configured in Jenkins
     def ARTIFACTORY_REPO      = 'ai2cloud-libs-release'     // Your JFrog repo
@@ -45,9 +45,8 @@ node {
               "target": "${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/${WAR_NAME}",
               "flat": true
             }
-         ]
+          ]
         }"""
-
         server.upload spec: uploadSpec, buildInfo: buildInfo
         server.publishBuildInfo buildInfo
 
@@ -74,8 +73,7 @@ node {
             sudo mv /tmp/${WAR_NAME} ${DEPLOY_WEBAPPS_PATH}/sampleweb.war
             sudo systemctl start tomcat
         """
-
-       echo "✅ Deployment completed."
+        echo "✅ Deployment completed."
         echo "🌐 Application URL: http://${DEPLOY_HOST}:8080/sampleweb/"
     }
 
