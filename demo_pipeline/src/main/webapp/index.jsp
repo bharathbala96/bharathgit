@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>AI2Cloud Sample WebApp</title>
+    <title>AI2Cloud Sample WebApp 2</title>
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;

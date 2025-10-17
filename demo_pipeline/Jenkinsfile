@@ -31,20 +31,27 @@ node {
 
     stage('Upload Artifact to JFrog Artifactory') {
         echo "📦 Uploading WAR to JFrog Artifactory..."
+    
+        // Fetch Artifactory server configuration
         def server = Artifactory.server(ARTIFACTORY_SERVER_ID)
         def buildInfo = Artifactory.newBuildInfo()
+    
+        // JSON upload spec (path to WAR file and Artifactory target path)
         def uploadSpec = """{
-          "files": [
-            {
-              "pattern": "target/*.war",
-              "target": "${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/${WAR_NAME}",
-              "flat": true
-            }
-          ]
+            "files": [
+                {
+                    "pattern": "demo_pipeline/target/*.war",
+                    "target": "${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/",
+                    "flat": true
+                }
+            ]
         }"""
+    
+        // Upload artifact
         server.upload spec: uploadSpec, buildInfo: buildInfo
         server.publishBuildInfo buildInfo
-        echo "✅ Uploaded to: https://trialytgm01.jfrog.io/artifactory/${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/${WAR_NAME}"
+    
+        echo "✅ Uploaded successfully to https://trialytpm01.jfrog.io/artifactory/${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/"
     }
 
     stage('Deploy to Remote Tomcat Server') {
