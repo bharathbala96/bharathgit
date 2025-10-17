@@ -6,7 +6,7 @@ node {
     def ARTIFACTORY_REPO      = 'ai2cloud-libs-release'
     def GROUP_PATH            = 'com/ai2cloud/sampleweb'
     def APP_VERSION           = '1.0.0'
-    def WAR_NAME              = "sampleweb-${APP_VERSION}.war"
+    def WAR_NAME              = "sampleweb.war"
 
     def DEPLOY_HOST           = '3.108.61.208'
     def DEPLOY_USER           = 'ec2-user'
