@@ -21,8 +21,10 @@ node {
     stage('Build WAR using Maven') {
         echo "⚙️ Building application with Maven..."
         def mvnHome = tool name: MAVEN_TOOL_NAME, type: 'maven'
-        withEnv(["PATH=${mvnHome}/bin:${env.PATH}"]) {
-            sh 'mvn clean package -DskipTests'
+        dir('demo_pipeline') {
+            withEnv(["PATH=${mvnHome}/bin:${env.PATH}"]) {
+                sh 'mvn clean package -DskipTests'
+            }
         }
         echo "✅ WAR file built successfully."
     }
