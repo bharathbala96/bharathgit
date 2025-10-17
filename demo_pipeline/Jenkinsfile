@@ -8,7 +8,7 @@ node {
     def APP_VERSION           = '1.0.0'
     def WAR_NAME              = "sampleweb.war"
 
-    def DEPLOY_HOST           = '3.108.61.208'
+    def DEPLOY_HOST           = '13.127.174.160'
     def DEPLOY_USER           = 'ec2-user'
     def DEPLOY_WEBAPPS_PATH   = '/usr/share/tomcat/webapps'
     def PRIVATE_KEY_PATH      = '/var/lib/jenkins/.ssh/id_rsa'
