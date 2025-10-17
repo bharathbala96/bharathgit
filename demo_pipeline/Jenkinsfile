@@ -39,7 +39,7 @@ node {
         remote.identityFile = PRIVATE_KEY_PATH
 
         // Transfer WAR file
-        sshPut remote: remote, from: "target/${WAR_NAME}", into: "/tmp/"
+        sshPut remote: remote, from: "demo_pipeline/target/${WAR_NAME}", into: "/tmp/"
 
         // Restart Tomcat with new WAR
         sshCommand remote: remote, command: """
