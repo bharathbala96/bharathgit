@@ -32,24 +32,22 @@ node {
     stage('Upload Artifact to JFrog Artifactory') {
         echo "📦 Uploading WAR to JFrog Artifactory..."
     
-        // Fetch Artifactory server configuration
-        def server = Artifactory.server(ARTIFACTORY_SERVER_ID)
-        def buildInfo = Artifactory.newBuildInfo()
+        // Get JFrog instance configured in Jenkins
+        def rtServer = jfrog.instance(ARTIFACTORY_SERVER_ID)
+        def rtUpload = jfrog.uploadSpec()
     
-        // JSON upload spec (path to WAR file and Artifactory target path)
-        def uploadSpec = """{
-            "files": [
-                {
-                    "pattern": "demo_pipeline/target/*.war",
-                    "target": "${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/",
-                    "flat": true
-                }
+        // Define upload specification
+        rtUpload.files = [
+            [
+                pattern: "demo_pipeline/target/*.war",
+                target: "${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/",
+                flat: true
             ]
-        }"""
+        ]
     
-        // Upload artifact
-        server.upload spec: uploadSpec, buildInfo: buildInfo
-        server.publishBuildInfo buildInfo
+        // Execute upload
+        rtServer.upload(rtUpload)
+        rtServer.publishBuildInfo()
     
         echo "✅ Uploaded successfully to https://trialytpm01.jfrog.io/artifactory/${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/"
     }
