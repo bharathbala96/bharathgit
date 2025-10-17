@@ -29,29 +29,6 @@ node {
         echo "✅ WAR file built successfully."
     }
 
-    stage('Upload Artifact to JFrog Artifactory') {
-        echo "📦 Uploading WAR to JFrog Artifactory..."
-    
-        // Get JFrog instance configured in Jenkins
-        def rtServer = jfrog.instance(ARTIFACTORY_SERVER_ID)
-        def rtUpload = jfrog.uploadSpec()
-    
-        // Define upload specification
-        rtUpload.files = [
-            [
-                pattern: "demo_pipeline/target/*.war",
-                target: "${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/",
-                flat: true
-            ]
-        ]
-    
-        // Execute upload
-        rtServer.upload(rtUpload)
-        rtServer.publishBuildInfo()
-    
-        echo "✅ Uploaded successfully to https://trialytpm01.jfrog.io/artifactory/${ARTIFACTORY_REPO}/${GROUP_PATH}/${APP_VERSION}/"
-    }
-
     stage('Deploy to Remote Tomcat Server') {
         echo "🚀 Deploying WAR to remote Tomcat at ${DEPLOY_HOST}..."
         def remote = [:]
