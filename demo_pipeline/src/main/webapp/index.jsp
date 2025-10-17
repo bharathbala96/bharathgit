@@ -39,7 +39,7 @@
 </head>
 <body>
 <div class="container">
-    <h1>🚀 Welcome to AI2Cloud Sample WebApp 2</h1>
+    <h1>🚀 Welcome to AI2Cloud Sample WebApp 3</h1>
     <p>This application was built and deployed automatically using Jenkins CI/CD and JFrog Artifactory.</p>
     <a href="hello.jsp">Click here for Hello Demo</a>
 </div>
